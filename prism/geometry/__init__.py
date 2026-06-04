@@ -10,6 +10,7 @@ from .coordinates import (
     elevation_azimuth,
     R_EARTH_KM,
 )
+from .sun import sun_ecef, sun_eci
 
 __all__ = [
     "Vec3",
@@ -21,4 +22,6 @@ __all__ = [
     "ecef_to_enu",
     "elevation_azimuth",
     "R_EARTH_KM",
+    "sun_ecef",
+    "sun_eci",
 ]
