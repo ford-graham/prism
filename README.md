@@ -7,26 +7,6 @@ bounce sunlight onto a point on the ground — and it ships a real network
 protocol and client so you can drive a reflector satellite over a socket, given
 its address.
 
-```
-   Sun
-     \
-      \   incoming sunlight
-       \
-        \        ____
-         \      /    \   satellite + flat mirror
-          \    | n ^  |
-           \   |   |  |   mirror normal n bisects the
-            \  |   |  |   sun and target directions
-             \ |   |  |
-              \|___|__|
-               \   |
-                \  |  reflected beam
-                 \ |
-                  \|
-        ___________X__________  target (lat, lon)
-        Earth
-```
-
 ---
 
 ## Install
