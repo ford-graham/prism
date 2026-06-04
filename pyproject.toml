@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "prism"
 version = "0.1.0"
-description = "A framework for computing and commanding orbital sunlight-reflector ('space mirror') satellites."
+description = "A framework for computing and commanding orbital sunlight-reflector ('space mirror') satellites over a real network protocol."
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }
@@ -17,6 +17,9 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
+
+[project.scripts]
+prism = "prism.cli:main"
 
 [project.urls]
 Homepage = "https://example.org/prism"
