@@ -1,20 +1,28 @@
-import math
-
 import pytest
 
-from prism.geometry.vectors import Vec3
+from prism.geometry.coordinates import (
+    geodetic_to_ecef, ecef_to_geodetic, R_EARTH_KM, elevation_azimuth,
+)
 
 
-def test_vec3_products_and_norms():
-    a = Vec3(1.0, 2.0, 3.0)
-    b = Vec3(-2.0, 0.5, 4.0)
-    assert a.dot(b) == pytest.approx(11.0)
-    assert a.cross(b) == Vec3(6.5, -10.0, 4.5)
-    assert a.norm() == pytest.approx(math.sqrt(14.0))
-    assert a.normalized().norm() == pytest.approx(1.0)
+def test_geodetic_ecef_roundtrip():
+    for lat, lon, alt in [(0, 0, 0), (51.5, -0.12, 0.05), (-33.9, 151.2, 0.0),
+                          (89.0, 179.0, 10.0)]:
+        ecef = geodetic_to_ecef(lat, lon, alt)
+        rlat, rlon, ralt = ecef_to_geodetic(ecef)
+        assert rlat == pytest.approx(lat, abs=1e-6)
+        assert rlon == pytest.approx(lon, abs=1e-6)
+        assert ralt == pytest.approx(alt, abs=1e-6)
 
 
-def test_vec3_angles_and_zero_guards():
-    assert Vec3(1, 0, 0).angle_to(Vec3(0, 1, 0)) == pytest.approx(math.pi / 2)
-    with pytest.raises(ValueError):
-        Vec3(0, 0, 0).normalized()
+def test_equator_radius():
+    ecef = geodetic_to_ecef(0.0, 0.0, 0.0)
+    assert ecef.norm() == pytest.approx(R_EARTH_KM, abs=1e-6)
+
+
+def test_elevation_straight_up():
+    obs = geodetic_to_ecef(0.0, 0.0, 0.0)
+    overhead = geodetic_to_ecef(0.0, 0.0, 500.0)
+    elev, _, rng = elevation_azimuth(obs, overhead, 0.0, 0.0)
+    assert elev == pytest.approx(90.0, abs=1e-3)
+    assert rng == pytest.approx(500.0, abs=1e-6)
